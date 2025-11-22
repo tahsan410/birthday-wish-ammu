@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Ammu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Great+Vibes&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Dancing Script', cursive;
+            background: linear-gradient(135deg, #FFD6E0, #FFE8EB);
+            color: #333;
+            overflow-x: hidden;
+            transition: all 1s ease;
+        }
+        .section {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 1s ease, visibility 1s ease;
+        }
+        .section.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .countdown {
+            background: linear-gradient(135deg, #FADADD, #FFFDF5);
+            flex-direction: column;
+            text-align: center;
+        }
+        .countdown h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        .countdown .timer {
+            font-size: 5rem;
+            font-weight: bold;
+            color: #FFD700;
+        }
+        .confetti {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        .confetti div {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #FFD700;
+            animation: float 3s infinite ease-in-out;
+        }
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); }
+            100% { transform: translateY(-100vh) rotate(360deg); }
+        }
+        .cake {
+            background: linear-gradient(135deg, #FADADD, #FFFDF5);
+            flex-direction: column;
+        }
+        .cake img {
+            width: 300px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        .candles {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .candle {
+            width: 20px;
+            height: 50px;
+            background: #FFFDF5;
+            margin: 0 5px;
+            border-radius: 10px 10px 0 0;
+            position: relative;
+        }
+        .flame {
+            width: 10px;
+            height: 20px;
+            background: #FFD700;
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            opacity: 0;
+            animation: flicker 1s infinite alternate;
+        }
+        @keyframes flicker {
+            0% { transform: translateX(-50%) scale(1); }
+            100% { transform: translateX(-50%) scale(1.1); }
+        }
+        .cut-btn {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #FFD700, #E6E6FA);
+            color: #333;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+        .cut-btn:hover {
+            transform: scale(1.05);
+        }
+        .hearts {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        .heart {
+            position: absolute;
+            font-size: 2rem;
+            color: #FFD6E0;
+            animation: floatUp 4s infinite ease-in-out;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(100vh); opacity: 1; }
+            100% { transform: translateY(-100vh); opacity: 0; }
+        }
+        .slideshow {
+            background: linear-gradient(135deg, #FADADD, #FFFDF5);
+            flex-direction: column;
+        }
+        .slideshow-container {
+            width: clamp(250px, 80vw, 400px);
+            height: clamp(150px, 50vw, 300px);
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            position: relative;
+        }
+        .slideshow-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+        .slideshow-container img.active {
+            opacity: 1;
+        }
+        .caption {
+            margin-top: 20px;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+        .wish {
+            background: linear-gradient(135deg, #FFD6E0, #FFE8EB);
+            flex-direction: column;
+            text-align: center;
+        }
+        .wish h1 {
+            font-size: 3rem;
+            color: #FFD700;
+            text-shadow: 0 0 10px #FFD700;
+        }
+        .wish p {
+            font-size: 2rem;
+            margin-top: 20px;
+        }
+        .balloons {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        .balloon-float {
+            position: absolute;
+            font-size: clamp(1.5em, 6vw, 3em);
+            animation: float 8s ease-in-out infinite;
+            opacity: 0.8;
+        }
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); }
+            100% { transform: translateY(-100px) rotate(360deg); }
+        }
+        .message {
+            background: linear-gradient(135deg, #FADADD, #FFFDF5);
+            flex-direction: column;
+            text-align: center;
+            padding: 20px;
+        }
+        .message p {
+            font-size: 1.5rem;
+            line-height: 1.6;
+        }
+        .sparkles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        .sparkle {
+            position: absolute;
+            font-size: 1rem;
+            color: #FFD700;
+            animation: twinkle 2s infinite;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+        .final {
+            background: linear-gradient(135deg, #FFD6E0, #FFE8EB);
+            flex-direction: column;
+            text-align: center;
+        }
+        .replay-btn {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #FFD700, #E6E6FA);
+            color: #333;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+        .replay-btn:hover {
+            transform: scale(1.05);
+        }
+        .footer {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            font-size: 1rem;
+        }
+        audio {
+            display: none;
+        }
+        @media (max-width: 768px) {
+            .countdown h1 { font-size: 1.5rem; }
+            .countdown .timer { font-size: 3rem; }
+            .wish h1 { font-size: 2rem; }
+            .wish p { font-size: 1.5rem; }
+            .message p { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+  
+    <audio id="bgMusic" src="Ammuhbd.mp3" preload="auto"></audio>
+
+    <!-- Countdown -->
+    <div id="countdown" class="section countdown active">
+        <h1>A special surprise is coming for you AMMU... 🎁</h1>
+        <div class="timer" id="timer">10</div>
+        <div class="confetti" id="confetti"></div>
+    </div>
+
+    <!-- Cake -->
+    <div id="cake" class="section cake">
+        <img src="ammu1.jpg" alt="Cake">
+        <div class="candles">
+            <div class="candle"><div class="flame"></div></div>
+            <div class="candle"><div class="flame"></div></div>
+            <div class="candle"><div class="flame"></div></div>
+        </div>
+        <button class="cut-btn" id="cutBtn">Click Here 🎂</button>
+        
+        <div class="hearts" id="hearts"></div>
+        
+    </div>
+     
+
+    <!-- Slideshow -->
+    <div id="slideshow" class="section slideshow">
+     
+        <div class="slideshow-container" id="slideshow-container">
+            <img src="ammu_ami.jpg" class="active">
+            <img src="ammu_ruha.jpg">
+            <img src="ammu_baba.jpg">
+            
+        </div>
+        <div class="caption">Happy Birthday Ammu ❤️</div>
+    </div>
+
+    <!-- Wish -->
+    <div id="wish" class="section wish">
+        <h1>🎉 Happy Birthday, Dear Ammu!</h1>
+        <p>💖 From Tahsan Farhad Ovi</p>
+        <div class="balloons" id="balloons"></div>
+    </div>
+
+    <!-- Message -->
+    <div id="message" class="section message">
+    <p>On this special day, November 23, may your life be filled with joy, peace, and endless blessings.  
+    You mean the world to me, and I pray this year brings you happiness, good health, and everything your heart wishes for. 🎉✨<br><br>
+    
+    Dear Ammu,<br>
+    You are the most caring, loving, and strongest person I know.<br>
+    May your birthday be filled with warmth, prayers, and the love you truly deserve.<br>
+    Thank you for every sacrifice, every smile, and every moment of comfort you give.<br>
+    You are my greatest blessing. 💖<br>
+    — With love, Ovi.</p>
+    
+    <div class="sparkles" id="sparkles"></div>
+</div>
+
+
+    <!-- Final -->
+    <div id="final" class="section final">
+        <button class="replay-btn" id="replayBtn">Replay Celebration 🔁</button>
+        <div class="footer">Made with 💕 by Tahsan Farhad Ovi</div>
+    </div>
+
+    <script>
+        let currentSection = 0;
+        const sections = ['countdown', 'cake', 'slideshow', 'wish', 'message', 'final'];
+        const bgMusic = document.getElementById('bgMusic');
+
+        // Countdown
+        let timeLeft = 10;
+        const timerEl = document.getElementById('timer');
+        const countdownInterval = setInterval(() => {
+            timeLeft--;
+            timerEl.textContent = timeLeft;
+            if (timeLeft <= 0) {
+                clearInterval(countdownInterval);
+                nextSection();
+            }
+        }, 1000);
+
+        // Confetti
+        const confettiEl = document.getElementById('confetti');
+        for (let i = 0; i < 50; i++) {
+            const conf = document.createElement('div');
+            conf.style.left = Math.random() * 100 + '%';
+            conf.style.animationDelay = Math.random() * 3 + 's';
+            confettiEl.appendChild(conf);
+        }
+
+        function nextSection() {
+            document.getElementById(sections[currentSection]).classList.remove('active');
+            currentSection++;
+            if (currentSection < sections.length) {
+                document.getElementById(sections[currentSection]).classList.add('active');
+                if (currentSection === 1) lightCandles();
+                if (currentSection === 2) startSlideshow();
+                if (currentSection === 3) setTimeout(nextSection, 5000);
+                if (currentSection === 4) setTimeout(nextSection, 10000);
+            }
+        }
+
+        function lightCandles() {
+            const flames = document.querySelectorAll('.flame');
+            flames.forEach((flame, i) => setTimeout(() => flame.style.opacity = '1', i * 500));
+        }
+
+        document.getElementById('cutBtn').addEventListener('click', () => {
+            document.getElementById('cutBtn').style.display = 'none';
+            bgMusic.play();
+            const heartsEl = document.getElementById('hearts');
+            for (let i = 0; i < 20; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.textContent = '❤️';
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDelay = Math.random() * 4 + 's';
+                heartsEl.appendChild(heart);
+            }
+            setTimeout(nextSection, 3000);
+        });
+
+        const images = document.querySelectorAll('#slideshow-container img');
+        let slideIndex = 0;
+        function startSlideshow() {
+            setInterval(() => {
+                images[slideIndex].classList.remove('active');
+                slideIndex = (slideIndex + 1) % images.length;
+                images[slideIndex].classList.add('active');
+            }, 3000);
+            setTimeout(nextSection, 12000);
+        }
+
+        const balloonsEl = document.getElementById('balloons');
+        const balloonPositions = window.innerWidth > 768 ?
+            ['5%', '15%', '25%', '35%', '45%', '55%', '65%', '75%', '85%', '95%'] :
+            ['10%', '30%', '50%', '70%', '90%'];
+        balloonPositions.forEach((pos, index) => {
+            const balloon = document.createElement('div');
+            balloon.className = 'balloon-float';
+            balloon.style.left = pos;
+            balloon.style.animationDelay = (index * 0.5) + 's';
+            balloon.textContent = '🎈';
+            balloonsEl.appendChild(balloon);
+        });
+
+        const sparklesEl = document.getElementById('sparkles');
+        for (let i = 0; i < 30; i++) {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            sparkle.textContent = '✨';
+            sparkle.style.left = Math.random() * 100 + '%';
+            sparkle.style.top = Math.random() * 100 + '%';
+            sparkle.style.animationDelay = Math.random() * 2 + 's';
+            sparklesEl.appendChild(sparkle);
+        }
+
+        // ✅ Fixed Replay Button
+        document.getElementById('replayBtn').addEventListener('click', () => {
+            sections.forEach(id => document.getElementById(id).classList.remove('active'));
+            currentSection = 0;
+            document.getElementById(sections[0]).classList.add('active');
+            timeLeft = 10;
+            timerEl.textContent = timeLeft;
+            const countdownInterval = setInterval(() => {
+                timeLeft--;
+                timerEl.textContent = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(countdownInterval);
+                    nextSection();
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
